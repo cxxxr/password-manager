@@ -35,10 +35,11 @@
                              (use-large-alpha t)
                              (use-digit t)
                              (use-sign nil))
-  (with-output-to-string (out)
-    (loop :with characters := (choices-characters use-small-alpha
-                                                  use-large-alpha
-                                                  use-digit
-                                                  (if use-sign *sign-characters*))
-          :repeat length
-          :do (write-char (random-elt characters) out))))
+  (let ((*random-state* (make-random-state t)))
+    (with-output-to-string (out)
+      (loop :with characters := (choices-characters use-small-alpha
+                                                    use-large-alpha
+                                                    use-digit
+                                                    (if use-sign *sign-characters*))
+            :repeat length
+            :do (write-char (random-elt characters) out)))))
