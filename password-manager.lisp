@@ -85,9 +85,10 @@
   (update-account-list))
 
 (defun account-menu (pane data x y)
-  (declare (ignore x y))
-  (let ((account (get-account-from-selection data 1)))
-    (when account
+  (declare (ignore x y data))
+  ;; 引数で渡されるdataはcapiのバグで正しい値ではないので使わない
+  (let ((data (capi:choice-selected-item pane)))
+    (when-let (account (get-account-from-selection data 0))
       (make-instance 'capi:menu
                      :items (list (make-menu-item :name "編集" :action 'edit-account)
                                   (make-menu-item :name "パスワードをコピー" :action 'copy-password)
