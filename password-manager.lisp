@@ -247,14 +247,15 @@
                (capi:quit-interface input-account-window)))))))
 
 (defun prompt-for-password (message)
-  (let* ((text-input-pane (make-instance 'capi:password-pane
-                                         :callback-type :data
-                                         :callback (lambda (password)
-                                                     (return-from prompt-for-password password)))))
-    (and (capi:popup-confirmer (make-instance 'capi:column-layout
-                                              :description (list text-input-pane))
-                               message)
-         (capi:text-input-pane-text text-input-pane))))
+  (capi:popup-confirmer
+   (make-instance 'capi:column-layout
+                  :description (list (make-instance
+                                      'capi:password-pane
+                                      :callback-type :element
+                                      :callback (lambda (pane)
+                                                  (capi:exit-dialog
+                                                   (capi:text-input-pane-text pane))))))
+   message))
 
 (defun input-password ()
   (tagbody
